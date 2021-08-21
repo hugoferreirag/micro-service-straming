@@ -17,15 +17,25 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+const fields = [
+  {
+    name: "video-therapy",
+    maxCount: 1,
+  },
+  {
+    name: "video-flag",
+    maxCount: 1,
+  },
+];
+routerMethods.post("/create", upload.fields(fields), (request, response) => {
+  const { files } = request;
 
-routerMethods.post(
-  "/create",
-  upload.single("video-therapy"),
-  (request, response) => {
-    console.log(request.body.sessionId);
-    const videoServices = new SubscriberService(request.file, response);
-    videoServices.uploadNewVideo();
-  }
-);
+  const videoServices = new SubscriberService(
+    { video: files["video-therapy"][0], flag: files["video-flag"][0] },
+    { ...request.body },
+    response
+  );
+  videoServices.uploadNewVideo();
+});
 
 module.exports = routerMethods;
