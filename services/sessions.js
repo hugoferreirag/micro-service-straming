@@ -31,7 +31,10 @@ class Sessions {
       throw {
         statusName: this.responseService.STATUS_NAME.CLIENT,
         input: "name",
-        message: this.responseService.mountErrorMessageForIrregularKey("name"),
+        message: this.responseService.mountErrorMessageForIrregularKey(
+          "name",
+          this.session.name
+        ),
       };
   }
   #checkSessionExists() {
@@ -42,8 +45,10 @@ class Sessions {
       throw {
         statusName: this.responseService.STATUS_NAME.CLIENT,
         input: "name",
-        message:
-          this.responseService.mountErrorMessageForRegisterExistsInDb("name"),
+        message: this.responseService.mountErrorMessageForRegisterExistsInDb(
+          "name",
+          this.session.name
+        ),
       };
   }
 }
