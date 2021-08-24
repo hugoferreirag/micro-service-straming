@@ -11,7 +11,7 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    lock: {
+    locked: {
       type: Boolean,
       required: true,
     },
@@ -24,7 +24,7 @@ const schema = new mongoose.Schema(
 
 const connectDb = mongoose.model("sessionsModel", schema);
 
-const modelKeys = ["name"];
+const modelKeys = ["name", "description", "locked"];
 
 module.exports = {
   modelKeys,

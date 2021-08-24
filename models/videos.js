@@ -7,7 +7,7 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    sessionName: {
+    videoUrl: {
       type: String,
       required: true,
     },
@@ -19,8 +19,8 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    videoFlag: {
-      type: String,
+    locked: {
+      type: Boolean,
       required: true,
     },
     deletedAt: {
@@ -34,7 +34,7 @@ const connectDb = mongoose.model("videosModel", schema);
 
 const modelKeys = [
   "sessionId",
-  "sessionName",
+  "videoUrl",
   "videoName",
   "videoDescription",
   "locked",
