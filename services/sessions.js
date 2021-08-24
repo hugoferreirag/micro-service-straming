@@ -38,7 +38,7 @@ class Sessions {
     const sessionExists = modelSessions.connectDb.findOne({
       name: this.session.name,
     });
-    if (!sessionExists)
+    if (sessionExists)
       throw {
         statusName: this.responseService.STATUS_NAME.CLIENT,
         input: "name",
