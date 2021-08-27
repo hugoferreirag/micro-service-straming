@@ -69,11 +69,13 @@ class Videos {
       );
     }
   }
-  async paginationVideos(sessionId, currentQuantity, incrementQuantity = 5) {
+  async paginationVideos(sessionId, currentPage, incrementQuantity = 5) {
     try {
+      const skip = incrementQuantity * (currentPage - 1);
       const allVideos = await modelVideos.connectDb
         .find({ sessionId: sessionId, deletedAt: null })
-        .limit(parseInt(currentQuantity) + incrementQuantity);
+        .skip(skip)
+        .limit(parseInt(incrementQuantity));
 
       this.responseService.handleSuccess(
         this.responseService.STATUS_NAME.SUCCESS,
@@ -89,7 +91,9 @@ class Videos {
       );
     }
   }
-  async paginationSessions(currentQuantity, limitQuantity = 5) {
+  async paginationSessions(currentPage, limitQuantity = 5) {
+    const skip = limitQuantity * (currentPage - 1);
+
     try {
       const allVideos = await modelVideos.connectDb.find({ deletedAt: null });
 
@@ -97,7 +101,7 @@ class Videos {
         .find({
           deletedAt: null,
         })
-        .skip(parseInt(currentQuantity))
+        .skip(skip)
         .limit(limitQuantity);
 
       const showcasePerSession = allSessions.map((session) => {

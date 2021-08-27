@@ -14,23 +14,20 @@ routerMethods.get("/list/all", (request, response) => {
   videoServices.getAllVideoPerSessions();
 });
 routerMethods.get(
-  "/list/pagination/sessionId/:sessionId/currentqtd/:currentqtd",
+  "/list/pagination/sessionId/:sessionId/page/:page",
   (request, response) => {
     const videoServices = new VideoServices({}, response);
     const sessionId = request.params.sessionId;
-    const currentQuantity = request.params.currentqtd;
+    const page = request.params.page;
 
-    videoServices.paginationVideos(sessionId, currentQuantity);
+    videoServices.paginationVideos(sessionId, page);
   }
 );
-routerMethods.get(
-  "/list/pagination/currentqtd/:currentqtd",
-  (request, response) => {
-    const videoServices = new VideoServices({}, response);
+routerMethods.get("/list/pagination/page/:page", (request, response) => {
+  const videoServices = new VideoServices({}, response);
 
-    const currentQuantity = request.params.currentqtd;
+  const page = request.params.page;
 
-    videoServices.paginationSessions(currentQuantity);
-  }
-);
+  videoServices.paginationSessions(page);
+});
 module.exports = routerMethods;
