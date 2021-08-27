@@ -19,7 +19,11 @@ class Videos {
 
       const { _doc } = await modelVideos.connectDb.create(this.video);
       this.responseService.handleSuccess(
-        this.responseService.STATUS_NAME.SUCCESS_CREATED,
+        this.responseService.handleSuccess(
+          this.responseService.STATUS_NAME.SUCCESS,
+          "messagem",
+          _doc
+        ),
         "Video cadastrado com sucesso.",
         _doc
       );
@@ -40,15 +44,15 @@ class Videos {
       });
 
       const showcasePerSession = allSessions.map((session) => {
-        const videosOfCurrentSession = allVideos.filter(
-          (video) => video.sessionId == session._id
-        );
+        const videosOfCurrentSession = allVideos.filter((video, index) => {
+          return video.sessionId == session._id;
+        });
         return {
           _id: session._id,
           sessionName: session.name,
           description: session.description,
           locked: session.locked,
-          videos: videosOfCurrentSession,
+          videos: videosOfCurrentSession.slice(0, 5),
         };
       });
 
@@ -58,6 +62,65 @@ class Videos {
         showcasePerSession
       );
     } catch (error) {
+      this.responseService.handleError(
+        this.responseService.STATUS_NAME.SERVICE,
+        "error system",
+        "not input"
+      );
+    }
+  }
+  async paginationVideos(sessionId, currentQuantity, incrementQuantity = 5) {
+    try {
+      const allVideos = await modelVideos.connectDb
+        .find({ sessionId: sessionId, deletedAt: null })
+        .limit(parseInt(currentQuantity) + incrementQuantity);
+
+      this.responseService.handleSuccess(
+        this.responseService.STATUS_NAME.SUCCESS,
+        "Videos das sessões de reiki",
+        allVideos
+      );
+    } catch (error) {
+      console.log(error);
+      this.responseService.handleError(
+        this.responseService.STATUS_NAME.SERVICE,
+        "error system",
+        "not input"
+      );
+    }
+  }
+  async paginationSessions(currentQuantity, limitQuantity = 5) {
+    try {
+      const allVideos = await modelVideos.connectDb.find({ deletedAt: null });
+
+      const allSessions = await modelSessions.connectDb
+        .find({
+          deletedAt: null,
+        })
+        .skip(parseInt(currentQuantity))
+        .limit(limitQuantity);
+
+      const showcasePerSession = allSessions.map((session) => {
+        const videosOfCurrentSession = allVideos.filter((video, index) => {
+          return video.sessionId == session._id;
+        });
+
+        return {
+          _id: session._id,
+          sessionName: session.name,
+          description: session.description,
+          locked: session.locked,
+          videos: videosOfCurrentSession.slice(0, limitQuantity),
+        };
+      });
+
+      this.responseService.handleSuccess(
+        this.responseService.STATUS_NAME.SUCCESS,
+        "Vitrine das sessões de reiki",
+        showcasePerSession
+      );
+    } catch (error) {
+      console.log(error);
       this.responseService.handleError(
         this.responseService.STATUS_NAME.SERVICE,
         "error system",

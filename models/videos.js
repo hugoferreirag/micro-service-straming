@@ -39,7 +39,6 @@ const modelKeys = [
   "videoDescription",
   "locked",
 ];
-
 module.exports = {
   modelKeys,
   connectDb,
