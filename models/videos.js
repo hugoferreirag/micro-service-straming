@@ -23,6 +23,10 @@ const schema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
+    videoThumb: {
+      type: String,
+      required: true,
+    },
     deletedAt: {
       type: Date,
     },

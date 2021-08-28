@@ -53,7 +53,6 @@ class Videos {
           _id: session._id,
           sessionName: session.name,
           description: session.description,
-          locked: session.locked,
           videos: videosOfCurrentSession.slice(0, 5),
         };
       });
@@ -93,7 +92,7 @@ class Videos {
       );
     }
   }
-  async paginationSessions(currentPage, limitQuantity = 2) {
+  async paginationSessions(currentPage, limitQuantity = 5) {
     const skip = limitQuantity * (currentPage - 1);
 
     try {
@@ -115,7 +114,6 @@ class Videos {
           _id: session._id,
           sessionName: session.name,
           description: session.description,
-          locked: session.locked,
           videos: videosOfCurrentSession.slice(0, limitQuantity),
         };
       });
