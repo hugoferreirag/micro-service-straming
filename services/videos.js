@@ -39,9 +39,11 @@ class Videos {
     try {
       const allVideos = await modelVideos.connectDb.find({ deletedAt: null });
 
-      const allSessions = await modelSessions.connectDb.find({
-        deletedAt: null,
-      });
+      const allSessions = await modelSessions.connectDb
+        .find({
+          deletedAt: null,
+        })
+        .limit(5);
 
       const showcasePerSession = allSessions.map((session) => {
         const videosOfCurrentSession = allVideos.filter((video, index) => {
@@ -91,7 +93,7 @@ class Videos {
       );
     }
   }
-  async paginationSessions(currentPage, limitQuantity = 5) {
+  async paginationSessions(currentPage, limitQuantity = 2) {
     const skip = limitQuantity * (currentPage - 1);
 
     try {

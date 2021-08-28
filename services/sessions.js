@@ -11,7 +11,7 @@ class Sessions {
   async createSession() {
     try {
       this.#validatePayloadReceived();
-      this.#checkSessionExists();
+      await this.#checkSessionExists();
       const newSession = await modelSessions.connectDb.create(this.session);
       this.responseService.handleSuccess(
         this.responseService.STATUS_NAME.SUCCESS_CREATED,
@@ -37,10 +37,11 @@ class Sessions {
         ),
       };
   }
-  #checkSessionExists() {
-    const sessionExists = modelSessions.connectDb.findOne({
+  async #checkSessionExists() {
+    const sessionExists = await modelSessions.connectDb.findOne({
       name: this.session.name,
     });
+    console.log(sessionExists);
     if (sessionExists)
       throw {
         statusName: this.responseService.STATUS_NAME.CLIENT,
